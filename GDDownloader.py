@@ -1,14 +1,10 @@
 import tkinter as tk
 from tkinter import messagebox, filedialog
-from geometryDash import search_levels, add_level_to_save_file, add_song_to_save_file, find_game_dir
-
-gamedir = find_game_dir()
-if gamedir is None:
-	messagebox.showerror("Error", "No game directory found!!!")
+from geometryDash import search_levels, add_level_to_save_file, add_song_to_save_file, gamedir
 
 def download(id: int):
 	try:
-		add_level_to_save_file(gamedir, id)
+		add_level_to_save_file(id)
 	except Exception as e:
 		messagebox.showinfo("Download unseccesful", f"Download of {id} FAILED!!!\nThis is usually because you are using school WiFi! Make sure you are using your phone hotspot!\nError Code:\n{e}")
 		return
@@ -21,7 +17,9 @@ def search():
 		messagebox.showinfo("Search unseccesful", f"Search of {search_input.get()} FAILED!!!\nThis is usually because you are using school WiFi! Make sure you are using your phone hotspot!\nError Code:\n{e}")
 		return
 
-	for widget in levels_frame.winfo_children(): widget.destroy()
+	for widget in levels_frame.winfo_children():
+		widget.destroy()
+
 	for i, level in enumerate(results):
 		tk.Label(levels_frame, text=str(level[0])).grid(column=0, row=i)
 		tk.Label(levels_frame, text=level[1]).grid(column=1, row=i)
@@ -31,11 +29,11 @@ def add_song():
 	path = filedialog.askopenfilename(title="Select the song file")
 	if path != "":
 		try:
-			add_song_to_save_file(gamedir, path, int(id_input.get()), title_input.get(), "Someone")
+			add_song_to_save_file(path, int(id_input.get()), title_input.get(), "Someone")
 		except Exception as e:
 			messagebox.showinfo("Adding song unseccesful", f"Adding song FAILED!!!\nThis should not be able to fail so you must've done something very wrong\nError code:\n{e}")
 			return
-		messagebox.showinfo("Adding song succesful", f"Succesfully added song")
+		messagebox.showinfo("Adding song succesful", "Succesfully added song")
 
 root = tk.Tk()
 root.title("GD Downloader")
